@@ -27,9 +27,21 @@ class MainFragment : Fragment() {
     private var NASAresponse: String? = null
     private val API_KEY = "cLnzdGQHY2ooiBemGakHwkR71d8TPylFtLMuP7Nw"
     private var asteroidArray = mutableListOf<Asteroid>()
-    private val viewModel: MainViewModel by lazy {
+
+   /*private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
+    } */
+
+    private val viewModel: MainViewModel by lazy {
+        val activity = requireNotNull(this.activity) {
+            "You can only access the viewModel after onViewCreated()"
+        }
+        //The ViewModelProviders (plural) is deprecated.
+        //ViewModelProviders.of(this, DevByteViewModel.Factory(activity.application)).get(DevByteViewModel::class.java)
+        ViewModelProvider(this, MainViewModel.Factory(activity.application)).get(MainViewModel::class.java)
+
     }
+
     private lateinit var  binding2 : FragmentMainBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -78,7 +90,7 @@ class MainFragment : Fragment() {
                 if (NASAresponse != null) {
                     Log.d("WWD", "last char is " + NASAresponse.toString().last())
                     Log.d("WWD", "calling parse function")
-                    val myJSON = JSONObject(NASAresponse)
+                    val myJSON = JSONObject(NASAresponse!!)
                     //Log.d("WWD", "myJSON is " + myJSON.toString())
                     asteroidArray = parseAsteroidsJsonResult(myJSON)
                     Log.d("WWD", "after parse function")
