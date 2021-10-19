@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.database.getDatabase
+import com.udacity.asteroidradar.repository.AsteroidRepository
+import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -16,8 +18,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _theAsteroid.value = anAsteroid
     }
 
-    //private val database = getDatabase()
-
+    private val database = getDatabase(application)
+    private val asteroidRepository = AsteroidRepository(database)
+    val asteroidList = asteroidRepository.asteroids
+    init {
+        viewModelScope.launch {
+            asteroidRepository.refreshAsteroids()
+        }
+    }
     /**
      * Factory for constructing DevByteViewModel with parameter
      */

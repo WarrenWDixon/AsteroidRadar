@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.api.computeEndDate
+import com.udacity.asteroidradar.api.getNASAAsteroids
 import com.udacity.asteroidradar.database.AsteroidsDatabase
 import com.udacity.asteroidradar.database.asDomainModel
 import kotlinx.coroutines.Dispatchers
@@ -19,10 +20,10 @@ class AsteroidRepository(private val database: AsteroidsDatabase) {
             it.asDomainModel()
         }
 
-    suspend fun refreshVideos() {
+    suspend fun refreshAsteroids() {
         withContext(Dispatchers.IO) {
-
-            //database.videoDao.insertAll(*playlist.asDatabaseModel())
+            val asteroidList = getNASAAsteroids()
+           // database.asteroidDao.insertAll(*asteroidList.toTypedArray())
         }
     }
 }

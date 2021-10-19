@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.*
 import com.udacity.asteroidradar.api.NASAApi
 import com.udacity.asteroidradar.api.computeEndDate
+import com.udacity.asteroidradar.api.getNASAAsteroids
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.detail.DetailFragment
@@ -25,8 +26,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MainFragment : Fragment() {
-    private var NASAresponse: String? = null
-    private val API_KEY = "cLnzdGQHY2ooiBemGakHwkR71d8TPylFtLMuP7Nw"
     private var asteroidArray = mutableListOf<Asteroid>()
     private lateinit var binding: FragmentMainBinding
    /*private val viewModel: MainViewModel by lazy {
@@ -122,40 +121,14 @@ class MainFragment : Fragment() {
         })
     } */
 
-    fun getNASAAsteroids() : MutableList<Asteroid> {
-        val currentDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-        val endDate = computeEndDate();
-        var asteroidList = mutableListOf<Asteroid>()
-        NASAApi.retrofitService.getAsteroids(currentDate, endDate, API_KEY).enqueue( object: Callback<String> {
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                NASAresponse = "Failure: " + t.message
-                Log.d("WWD", "API call failed  " + NASAresponse)
-            }
-
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                NASAresponse = response.body().toString()
-                Log.d("WWD", " API call success ")
-                if (NASAresponse != null) {
-                    val myJSON = JSONObject(NASAresponse!!)
-                    asteroidList = parseAsteroidsJsonResult(myJSON)
-                }
-                val asteroidAdapter = AsteroidAdapter(asteroidList, AsteroidClickListener { anAsteroid ->
-                    viewModel.setTheAsteroid(anAsteroid)
-                })
-                binding.asteroidRecycler.adapter = asteroidAdapter
-            }
-        })
-        return asteroidList
-    }
 
 
     private fun fetchImageOfTheDay(binding: FragmentMainBinding) {
-        NASAApi.retrofitImageService.getImageOfTheDay(API_KEY).enqueue( object: Callback<ImageOfTheDay> {
+        NASAApi.retrofitImageService.getImageOfTheDay(Constants.API_KEY).enqueue( object: Callback<ImageOfTheDay> {
 
             override fun onFailure(call: Call<ImageOfTheDay>, t: Throwable) {
-                NASAresponse = "Failure: " + t.message
-                Log.d("WWD", "API call failed  " + NASAresponse)
+                Log.d("WWD", "API call failed  " + t.message)
             }
 
             override fun onResponse(call: Call<ImageOfTheDay>, response: Response<ImageOfTheDay>) {
