@@ -12,7 +12,7 @@ class AsteroidAdapter(val asteroidList: List<Asteroid>, val clickListener: Aster
 //class AsteroidAdapter(val asteroidList: List<Asteroid> ): RecyclerView.Adapter<AsteroidAdapter.AsteroidViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AsteroidViewHolder {
-        Log.d("WWD", "In AsteroidAdapter onCreateViewHolder")
+       // Log.d("WWD", "In AsteroidAdapter onCreateViewHolder")
         val layoutInflater = LayoutInflater.from(parent.context)
        // val view = layoutInflater.inflate(R.layout.list_item_asteroid, parent, false)
         val binding = ListItemAsteroidBinding.inflate(layoutInflater, parent, false)
@@ -21,9 +21,9 @@ class AsteroidAdapter(val asteroidList: List<Asteroid>, val clickListener: Aster
 
     override fun onBindViewHolder(holder: AsteroidViewHolder, position: Int) {
         val anAsteroid = asteroidList[position]
-        Log.d("WWD", " -------------------in onBindViewHolder position is " + position)
-        Log.d("WWD", "--------------------name is " + anAsteroid.codename)
-        Log.d("WWD", "--------------------date is " + anAsteroid.closeApproachDate)
+        //Log.d("WWD", " -------------------in onBindViewHolder position is " + position)
+       // Log.d("WWD", "--------------------name is " + anAsteroid.codename)
+       // Log.d("WWD", "--------------------date is " + anAsteroid.closeApproachDate)
         holder.binding.asteroidName.text = anAsteroid.codename
         holder.binding.asteroidDate.text = anAsteroid.closeApproachDate
         holder.binding.asteroid = anAsteroid

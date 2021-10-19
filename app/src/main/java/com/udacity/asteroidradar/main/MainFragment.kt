@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.*
 import com.udacity.asteroidradar.api.NASAApi
+import com.udacity.asteroidradar.api.computeEndDate
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.detail.DetailFragment
@@ -74,7 +75,9 @@ class MainFragment : Fragment() {
 
     private fun getNASAAsteroids(binding: FragmentMainBinding) {
         val currentDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-        NASAApi.retrofitService.getAsteroids(currentDate, currentDate, API_KEY).enqueue( object: Callback<String> {
+        val endDate = computeEndDate();
+        Log.d("WWD", "end date is " + endDate)
+        NASAApi.retrofitService.getAsteroids(currentDate, endDate, API_KEY).enqueue( object: Callback<String> {
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 NASAresponse = "Failure: " + t.message
@@ -107,9 +110,9 @@ class MainFragment : Fragment() {
 
                 }
                 Log.d("WWD", "the array size is " + asteroidArray.size)
-                for (asteroid in asteroidArray) {
-                    Log.d("WWD", "asteroid is " + asteroid.toString())
-                }
+               // for (asteroid in asteroidArray) {
+              //      Log.d("WWD", "asteroid is " + asteroid.toString())
+               // }
             }
         })
     }
