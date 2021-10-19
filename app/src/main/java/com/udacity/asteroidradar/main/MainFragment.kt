@@ -28,7 +28,7 @@ class MainFragment : Fragment() {
     private var NASAresponse: String? = null
     private val API_KEY = "cLnzdGQHY2ooiBemGakHwkR71d8TPylFtLMuP7Nw"
     private var asteroidArray = mutableListOf<Asteroid>()
-
+    private lateinit var binding: FragmentMainBinding
    /*private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     } */
@@ -49,13 +49,18 @@ class MainFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         Log.d("WWD", "in onCreateView for MainFragment")
 
-        val binding = FragmentMainBinding.inflate(inflater)
+        binding = FragmentMainBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
         binding.viewModel = viewModel
 
         setHasOptionsMenu(true)
-        getNASAAsteroids(binding)
+        asteroidArray = getNASAAsteroids()
+
+        /* val asteroidAdapter = AsteroidAdapter(asteroidArray, AsteroidClickListener { anAsteroid ->
+            viewModel.setTheAsteroid(anAsteroid)
+        })
+        binding.asteroidRecycler.adapter = asteroidAdapter */
         fetchImageOfTheDay(binding)
         viewModel.theAsteroid.observe(viewLifecycleOwner, { selectedAsteroid ->
             this.findNavController().navigate(MainFragmentDirections.actionShowDetail(selectedAsteroid))
@@ -73,7 +78,7 @@ class MainFragment : Fragment() {
         return true
     }
 
-    private fun getNASAAsteroids(binding: FragmentMainBinding) {
+    /* private fun getNASAAsteroids(binding: FragmentMainBinding) {
         val currentDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val endDate = computeEndDate();
         Log.d("WWD", "end date is " + endDate)
@@ -115,7 +120,35 @@ class MainFragment : Fragment() {
                // }
             }
         })
+    } */
+
+    fun getNASAAsteroids() : MutableList<Asteroid> {
+        val currentDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val endDate = computeEndDate();
+        var asteroidList = mutableListOf<Asteroid>()
+        NASAApi.retrofitService.getAsteroids(currentDate, endDate, API_KEY).enqueue( object: Callback<String> {
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                NASAresponse = "Failure: " + t.message
+                Log.d("WWD", "API call failed  " + NASAresponse)
+            }
+
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                NASAresponse = response.body().toString()
+                Log.d("WWD", " API call success ")
+                if (NASAresponse != null) {
+                    val myJSON = JSONObject(NASAresponse!!)
+                    asteroidList = parseAsteroidsJsonResult(myJSON)
+                }
+                val asteroidAdapter = AsteroidAdapter(asteroidList, AsteroidClickListener { anAsteroid ->
+                    viewModel.setTheAsteroid(anAsteroid)
+                })
+                binding.asteroidRecycler.adapter = asteroidAdapter
+            }
+        })
+        return asteroidList
     }
+
 
     private fun fetchImageOfTheDay(binding: FragmentMainBinding) {
         NASAApi.retrofitImageService.getImageOfTheDay(API_KEY).enqueue( object: Callback<ImageOfTheDay> {
