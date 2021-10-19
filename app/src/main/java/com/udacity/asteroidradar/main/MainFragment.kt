@@ -43,6 +43,17 @@ class MainFragment : Fragment() {
     }
 
     private lateinit var  binding2 : FragmentMainBinding
+    private var asteroidAdapter: AsteroidAdapter? = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.asteroidList.observe(viewLifecycleOwner) { asteroids ->
+            Log.d("WWD", "updated asteroidList in viewModel" + asteroids)
+            asteroids.apply {
+                asteroidAdapter?.asteroidList = asteroids
+            }
+        }
+
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -54,12 +65,12 @@ class MainFragment : Fragment() {
         binding.viewModel = viewModel
 
         setHasOptionsMenu(true)
-        asteroidArray = getNASAAsteroids()
+        //asteroidArray = getNASAAsteroids()
 
-        /* val asteroidAdapter = AsteroidAdapter(asteroidArray, AsteroidClickListener { anAsteroid ->
+        asteroidAdapter = AsteroidAdapter(AsteroidClickListener { anAsteroid ->
             viewModel.setTheAsteroid(anAsteroid)
         })
-        binding.asteroidRecycler.adapter = asteroidAdapter */
+        binding.asteroidRecycler.adapter = asteroidAdapter
         fetchImageOfTheDay(binding)
         viewModel.theAsteroid.observe(viewLifecycleOwner, { selectedAsteroid ->
             this.findNavController().navigate(MainFragmentDirections.actionShowDetail(selectedAsteroid))

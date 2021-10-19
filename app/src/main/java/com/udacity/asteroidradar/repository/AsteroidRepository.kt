@@ -1,5 +1,6 @@
 package com.udacity.asteroidradar.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.udacity.asteroidradar.Asteroid
@@ -22,8 +23,10 @@ class AsteroidRepository(private val database: AsteroidsDatabase) {
         }
 
     suspend fun refreshAsteroids() {
+        Log.d("WWD", "in repository refreshAsteroids")
         withContext(Dispatchers.IO) {
             val asteroidList = getNASAAsteroids()
+            Log.d("WWD", "in refreshAsteroids the data is " + asteroidList)
             database.asteroidDao.insertAll(*asteroidList.asDatabaseModel())
         }
     }

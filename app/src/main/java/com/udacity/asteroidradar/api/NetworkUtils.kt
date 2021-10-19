@@ -13,17 +13,14 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
-   // Log.d("WWD", "in parse jsonResult:  ")
+    Log.d("WWD", "in parse jsonResult:  ")
     val nearEarthObjectsJson = jsonResult.getJSONObject("near_earth_objects")
-    //Log.d("WWD", "in parse  nearEarthObjects: " + nearEarthObjectsJson)
 
     val asteroidList = ArrayList<Asteroid>()
 
     val nextSevenDaysFormattedDates = getNextSevenDaysFormattedDates()
-    Log.d("WWD", "dates: " + nextSevenDaysFormattedDates)
     var dateAsteroidJsonArray : JSONArray
     for (formattedDate in nextSevenDaysFormattedDates) {
-        Log.d("WWD", "formatted date in loop is " + formattedDate)
 
         try {
             dateAsteroidJsonArray = nearEarthObjectsJson.getJSONArray(formattedDate)
@@ -31,7 +28,7 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
             Log.d("WWD", "no array for date" + formattedDate)
             continue;
         }
-       Log.d("WWD", "dateArray is " + dateAsteroidJsonArray)
+       //Log.d("WWD", "dateArray is " + dateAsteroidJsonArray)
          for (i in 0 until dateAsteroidJsonArray.length()) {
             val asteroidJson = dateAsteroidJsonArray.getJSONObject(i)
             val id = asteroidJson.getLong("id")
@@ -54,7 +51,7 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
             asteroidList.add(asteroid)
         }
     }
-
+    Log.d("WWD", "in parse asteroidList size is " + asteroidList.size)
     return asteroidList
 }
 

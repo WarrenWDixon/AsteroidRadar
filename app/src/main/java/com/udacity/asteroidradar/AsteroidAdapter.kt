@@ -8,9 +8,18 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.udacity.asteroidradar.databinding.ListItemAsteroidBinding
 
-class AsteroidAdapter(val asteroidList: List<Asteroid>, val clickListener: AsteroidClickListener): RecyclerView.Adapter<AsteroidAdapter.AsteroidViewHolder>() {
+class AsteroidAdapter( val clickListener: AsteroidClickListener): RecyclerView.Adapter<AsteroidAdapter.AsteroidViewHolder>() {
 //class AsteroidAdapter(val asteroidList: List<Asteroid> ): RecyclerView.Adapter<AsteroidAdapter.AsteroidViewHolder>() {
+    var asteroidList: List<Asteroid> = emptyList()
+    set(value) {
+        field = value
+        // For an extra challenge, update this to use the paging library.
 
+        // Notify any registered observers that the data set has changed. This will cause every
+        // element in our RecyclerView to be invalidated.
+        notifyDataSetChanged()
+        Log.d("WWD", " --------------notify data set changed -------------")
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AsteroidViewHolder {
        // Log.d("WWD", "In AsteroidAdapter onCreateViewHolder")
         val layoutInflater = LayoutInflater.from(parent.context)
