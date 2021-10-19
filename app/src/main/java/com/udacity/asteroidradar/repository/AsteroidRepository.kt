@@ -6,6 +6,7 @@ import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.api.computeEndDate
 import com.udacity.asteroidradar.api.getNASAAsteroids
 import com.udacity.asteroidradar.database.AsteroidsDatabase
+import com.udacity.asteroidradar.database.asDatabaseModel
 import com.udacity.asteroidradar.database.asDomainModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,7 +24,7 @@ class AsteroidRepository(private val database: AsteroidsDatabase) {
     suspend fun refreshAsteroids() {
         withContext(Dispatchers.IO) {
             val asteroidList = getNASAAsteroids()
-           // database.asteroidDao.insertAll(*asteroidList.toTypedArray())
+            database.asteroidDao.insertAll(*asteroidList.asDatabaseModel())
         }
     }
 }
