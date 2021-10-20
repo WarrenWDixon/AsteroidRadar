@@ -34,14 +34,22 @@ class AsteroidRepository(private val database: AsteroidsDatabase) {
         val currentDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val endDate = computeEndDate();
         withContext(Dispatchers.IO) {
-            // following line of code used getNASAAsteroids in network utils, but it returns before the network data is fetched so returns empty array
-            val asteroidList = parseAsteroidsJsonResult(JSONObject(retrofitService.getAsteroids(currentDate, endDate, Constants.API_KEY)))
-
-            // THE FOLLOWING LINE OF CODE CRASHES
-            //val asteroidList = NASAApi.retrofitService.getAsteroids(currentDate, endDate, Constants.API_KEY).await()
-            Log.d("WWD", "after network call")
-           // Log.d("WWD", "in refreshAsteroids the data is " + asteroidList)
-           database.asteroidDao.insertAll(*asteroidList.asDatabaseModel())
+            try {
+                // following line of code used getNASAAsteroids in network utils, but it returns before the network data is fetched so returns empty array
+                val asteroidList = parseAsteroidsJsonResult(
+                    JSONObject(
+                        retrofitService.getAsteroids(
+                            currentDate,
+                            endDate,
+                            Constants.API_KEY
+                        )
+                    )
+                )
+                Log.d("WWD", "after network call")
+                database.asteroidDao.insertAll(*asteroidList.asDatabaseModel())
+            } catch (e: Exception) {
+                Log.d("WWD", "refreshAsteroids exception:" + e.message)
+            }
         }
     }
 }

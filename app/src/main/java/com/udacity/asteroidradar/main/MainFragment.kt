@@ -42,12 +42,6 @@ class MainFragment : Fragment() {
     private var asteroidAdapter: AsteroidAdapter? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /* viewModel.asteroids.observe(viewLifecycleOwner) { asteroids ->
-            Log.d("WWD", "updated asteroidList in viewModel" + asteroids)
-            asteroids.apply {
-                asteroidAdapter?.asteroidList = asteroids
-            }
-        } */
 
     }
 
@@ -61,9 +55,8 @@ class MainFragment : Fragment() {
         binding.viewModel = viewModel
 
         setHasOptionsMenu(true)
-        //asteroidArray = getNASAAsteroids(binding)
 
-       asteroidAdapter = AsteroidAdapter(AsteroidClickListener { anAsteroid ->
+        asteroidAdapter = AsteroidAdapter(AsteroidClickListener { anAsteroid ->
             viewModel.setTheAsteroid(anAsteroid)
         })
         binding.asteroidRecycler.adapter = asteroidAdapter
@@ -72,7 +65,7 @@ class MainFragment : Fragment() {
             this.findNavController().navigate(MainFragmentDirections.actionShowDetail(selectedAsteroid))
         })
 
-        viewModel.asteroids.observe(viewLifecycleOwner) {
+       viewModel.asteroids.observe(viewLifecycleOwner) {
             asteroidAdapter?.asteroidList = it
         }
         return binding.root
@@ -87,52 +80,6 @@ class MainFragment : Fragment() {
         return true
     }
 
-    /*fun getNASAAsteroids(binding: FragmentMainBinding) : MutableList<Asteroid> {
-        val currentDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-        val endDate = computeEndDate();
-        Log.d("WWD", "end date is " + endDate)
-        NASAApi.retrofitService.getAsteroids(currentDate, endDate, Constants.API_KEY).enqueue( object: Callback<String> {
-
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                NASAresponse = "Failure: " + t.message
-                Log.d("WWD", "API call failed  " + NASAresponse)
-            }
-
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                if (response != null)
-                 NASAresponse = response.body().toString()
-                else
-                    Log.d("WWD", "response is null")
-                Log.d("WWD", " API call success ")
-                if (NASAresponse != null) {
-                    Log.d("WWD", "last char is " + NASAresponse.toString().last())
-                    Log.d("WWD", "calling parse function")
-                    val myJSON = JSONObject(NASAresponse!!)
-                    //Log.d("WWD", "myJSON is " + myJSON.toString())
-                    asteroidArray = parseAsteroidsJsonResult(myJSON)
-                    Log.d("WWD", "after parse function")
-                    Log.d("WWD"," asteroid list size is " + asteroidArray.size)
-                    val asteroidAdapter = AsteroidAdapter( AsteroidClickListener { anAsteroid ->
-                        Snackbar.make(
-                            requireActivity().findViewById(android.R.id.content),
-                            "ASTEROID SELECTED",
-                            Snackbar.LENGTH_SHORT // How long to display the message.
-                        ).show()
-                        viewModel.setTheAsteroid(anAsteroid)
-                    })
-                    binding.asteroidRecycler.adapter = asteroidAdapter
-                    asteroidAdapter.asteroidList = asteroidArray
-
-                }
-                Log.d("WWD", "the array size is " + asteroidArray.size)
-
-            }
-        })
-        return asteroidArray
-    } */
-
-
-
 
     private fun fetchImageOfTheDay(binding: FragmentMainBinding) {
         NASAApi.retrofitImageService.getImageOfTheDay(Constants.API_KEY).enqueue( object: Callback<ImageOfTheDay> {
@@ -144,7 +91,7 @@ class MainFragment : Fragment() {
             override fun onResponse(call: Call<ImageOfTheDay>, response: Response<ImageOfTheDay>) {
                 val imageObject = response.body() as ImageOfTheDay
                 val imageURL: String = imageObject.url
-                Log.d("WWD", "got NASA image url " + imageURL)
+                Log.d("WWD", "got NASA image url " )
                 Picasso.get().load(imageURL).into(binding.activityMainImageOfTheDay)
             }
         })

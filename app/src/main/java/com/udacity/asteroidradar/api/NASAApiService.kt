@@ -41,23 +41,11 @@ private val retrofitImage = Retrofit.Builder()
  */
 interface NASAApiService {
 
-    // THIS IS HOW MARS STEP 8 WORKS BUT I CANNOT USE IT AS THE SCALAR CONVERTER DOESN'T WORK FOR RETURNING A List<Asteroid>
-   //@GET("/neo/rest/v1/feed")
-   //suspend fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): List<Asteroid>
-
-    // old logic
-   //@GET("/neo/rest/v1/feed")
-   //fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): Call<String>
-
     @GET("/neo/rest/v1/feed")
-    fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): String
+    suspend fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): String
 
     @GET("/planetary/apod")
     fun getImageOfTheDay(@Query("api_key") API_Key: String): Call<ImageOfTheDay>
-
-    // THIS IS HOW DEVBYTE PROJECT WORKS BUT AGAIN CANNOT USE IT AS IT REQUIRES MOSHI
-    //@GET("/neo/rest/v1/feed")
-    //fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): Deferred<NetworkAsteroidContainer>
 
 }
 
