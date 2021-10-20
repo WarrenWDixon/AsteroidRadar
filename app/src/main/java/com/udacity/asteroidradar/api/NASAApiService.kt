@@ -2,7 +2,9 @@ package com.udacity.asteroidradar.api
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.ImageOfTheDay
+import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -38,16 +40,22 @@ private val retrofitImage = Retrofit.Builder()
  * A public interface that exposes the [getProperties] method
  */
 interface NASAApiService {
-    /**
-     * Returns a Coroutine [List] of [MarsProperty] which can be fetched with await() if in a Coroutine scope.
-     * The @GET annotation indicates that the "realestate" endpoint will be requested with the GET
-     * HTTP method
-     */
-    @GET("/neo/rest/v1/feed")
-    fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): Call<String>
+
+    // THIS IS HOW MARS STEP 8 WORKS BUT I CANNOT USE IT AS THE SCALAR CONVERTER DOESN'T WORK FOR RETURNING A List<Asteroid>
+   //@GET("/neo/rest/v1/feed")
+   //suspend fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): List<Asteroid>
+
+   @GET("/neo/rest/v1/feed")
+   fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): Call<String>
+
 
     @GET("/planetary/apod")
     fun getImageOfTheDay(@Query("api_key") API_Key: String): Call<ImageOfTheDay>
+
+    // THIS IS HOW DEVBYTE PROJECT WORKS BUT AGAIN CANNOT USE IT AS IT REQUIRES MOSHI
+    //@GET("/neo/rest/v1/feed")
+    //fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): Deferred<NetworkAsteroidContainer>
+
 }
 
 /**

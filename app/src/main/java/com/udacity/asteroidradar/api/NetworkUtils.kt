@@ -76,7 +76,8 @@ fun computeEndDate() : String {
     return dateFormat.format(currentTime)
 }
 
-fun getNASAAsteroids() : MutableList<Asteroid> {
+    // THE FOLLOWING CODE WORKS AND READS THE ASTEROID DATA SINCE
+   /* fun getNASAAsteroids() : MutableList<Asteroid> {
     var NASAresponse: String? = null
     val currentDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
     val endDate = computeEndDate();
@@ -95,12 +96,9 @@ fun getNASAAsteroids() : MutableList<Asteroid> {
             if (NASAresponse != null) {
                 val myJSON = JSONObject(NASAresponse!!)
                 asteroidList = parseAsteroidsJsonResult(myJSON)
+                //Log.d("WWD", "in getAsteroids parsed " + asteroidList)
             }
-            /* val asteroidAdapter = AsteroidAdapter(asteroidList, AsteroidClickListener { anAsteroid ->
-                viewModel.setTheAsteroid(anAsteroid)
-            })
-            binding.asteroidRecycler.adapter = asteroidAdapter */
         }
     })
     return asteroidList
-}
+} */

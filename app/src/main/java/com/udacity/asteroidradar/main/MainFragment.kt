@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.*
 import com.udacity.asteroidradar.api.NASAApi
 import com.udacity.asteroidradar.api.computeEndDate
-import com.udacity.asteroidradar.api.getNASAAsteroids
+//import com.udacity.asteroidradar.api.getNASAAsteroids
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.detail.DetailFragment
@@ -28,16 +28,12 @@ import java.util.*
 class MainFragment : Fragment() {
     private var asteroidArray = mutableListOf<Asteroid>()
     private lateinit var binding: FragmentMainBinding
-   /*private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
-    } */
+    var NASAresponse = ""
 
     private val viewModel: MainViewModel by lazy {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onViewCreated()"
         }
-        //The ViewModelProviders (plural) is deprecated.
-        //ViewModelProviders.of(this, DevByteViewModel.Factory(activity.application)).get(DevByteViewModel::class.java)
         ViewModelProvider(this, MainViewModel.Factory(activity.application)).get(MainViewModel::class.java)
 
     }
@@ -46,12 +42,12 @@ class MainFragment : Fragment() {
     private var asteroidAdapter: AsteroidAdapter? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.asteroidList.observe(viewLifecycleOwner) { asteroids ->
+        /* viewModel.asteroids.observe(viewLifecycleOwner) { asteroids ->
             Log.d("WWD", "updated asteroidList in viewModel" + asteroids)
             asteroids.apply {
                 asteroidAdapter?.asteroidList = asteroids
             }
-        }
+        } */
 
     }
 
@@ -65,12 +61,12 @@ class MainFragment : Fragment() {
         binding.viewModel = viewModel
 
         setHasOptionsMenu(true)
-        //asteroidArray = getNASAAsteroids()
+        asteroidArray = getNASAAsteroids(binding)
 
-        asteroidAdapter = AsteroidAdapter(AsteroidClickListener { anAsteroid ->
+       /* asteroidAdapter = AsteroidAdapter(AsteroidClickListener { anAsteroid ->
             viewModel.setTheAsteroid(anAsteroid)
         })
-        binding.asteroidRecycler.adapter = asteroidAdapter
+        binding.asteroidRecycler.adapter = asteroidAdapter */
         fetchImageOfTheDay(binding)
         viewModel.theAsteroid.observe(viewLifecycleOwner, { selectedAsteroid ->
             this.findNavController().navigate(MainFragmentDirections.actionShowDetail(selectedAsteroid))
@@ -88,11 +84,11 @@ class MainFragment : Fragment() {
         return true
     }
 
-    /* private fun getNASAAsteroids(binding: FragmentMainBinding) {
+    fun getNASAAsteroids(binding: FragmentMainBinding) : MutableList<Asteroid> {
         val currentDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val endDate = computeEndDate();
         Log.d("WWD", "end date is " + endDate)
-        NASAApi.retrofitService.getAsteroids(currentDate, endDate, API_KEY).enqueue( object: Callback<String> {
+        NASAApi.retrofitService.getAsteroids(currentDate, endDate, Constants.API_KEY).enqueue( object: Callback<String> {
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 NASAresponse = "Failure: " + t.message
@@ -101,7 +97,7 @@ class MainFragment : Fragment() {
 
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response != null)
-                    NASAresponse = response.body().toString()
+                 NASAresponse = response.body().toString()
                 else
                     Log.d("WWD", "response is null")
                 Log.d("WWD", " API call success ")
@@ -113,7 +109,7 @@ class MainFragment : Fragment() {
                     asteroidArray = parseAsteroidsJsonResult(myJSON)
                     Log.d("WWD", "after parse function")
                     Log.d("WWD"," asteroid list size is " + asteroidArray.size)
-                    val asteroidAdapter = AsteroidAdapter(asteroidArray, AsteroidClickListener { anAsteroid ->
+                    val asteroidAdapter = AsteroidAdapter( AsteroidClickListener { anAsteroid ->
                         Snackbar.make(
                             requireActivity().findViewById(android.R.id.content),
                             "ASTEROID SELECTED",
@@ -122,15 +118,15 @@ class MainFragment : Fragment() {
                         viewModel.setTheAsteroid(anAsteroid)
                     })
                     binding.asteroidRecycler.adapter = asteroidAdapter
+                    asteroidAdapter.asteroidList = asteroidArray
 
                 }
                 Log.d("WWD", "the array size is " + asteroidArray.size)
-               // for (asteroid in asteroidArray) {
-              //      Log.d("WWD", "asteroid is " + asteroid.toString())
-               // }
+
             }
         })
-    } */
+        return asteroidArray
+    }
 
 
 
