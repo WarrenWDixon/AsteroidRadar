@@ -61,17 +61,20 @@ class MainFragment : Fragment() {
         binding.viewModel = viewModel
 
         setHasOptionsMenu(true)
-        asteroidArray = getNASAAsteroids(binding)
+        //asteroidArray = getNASAAsteroids(binding)
 
-       /* asteroidAdapter = AsteroidAdapter(AsteroidClickListener { anAsteroid ->
+       asteroidAdapter = AsteroidAdapter(AsteroidClickListener { anAsteroid ->
             viewModel.setTheAsteroid(anAsteroid)
         })
-        binding.asteroidRecycler.adapter = asteroidAdapter */
+        binding.asteroidRecycler.adapter = asteroidAdapter
         fetchImageOfTheDay(binding)
         viewModel.theAsteroid.observe(viewLifecycleOwner, { selectedAsteroid ->
             this.findNavController().navigate(MainFragmentDirections.actionShowDetail(selectedAsteroid))
         })
 
+        viewModel.asteroids.observe(viewLifecycleOwner) {
+            asteroidAdapter?.asteroidList = it
+        }
         return binding.root
     }
 
@@ -84,7 +87,7 @@ class MainFragment : Fragment() {
         return true
     }
 
-    fun getNASAAsteroids(binding: FragmentMainBinding) : MutableList<Asteroid> {
+    /*fun getNASAAsteroids(binding: FragmentMainBinding) : MutableList<Asteroid> {
         val currentDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val endDate = computeEndDate();
         Log.d("WWD", "end date is " + endDate)
@@ -126,7 +129,7 @@ class MainFragment : Fragment() {
             }
         })
         return asteroidArray
-    }
+    } */
 
 
 

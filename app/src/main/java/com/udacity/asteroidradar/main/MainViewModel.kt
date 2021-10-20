@@ -29,19 +29,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private val database = getDatabase(application)
-    //private val asteroidRepository = AsteroidRepository(database)
+    private val asteroidRepository = AsteroidRepository(database)
     //val asteroidList = asteroidRepository.asteroids
-    /* init {
+    init {
         viewModelScope.launch {
-            //asteroidRepository.refreshAsteroids()
-            viewModelGetAsteroids();
+            asteroidRepository.refreshAsteroids()
+            //viewModelGetAsteroids();
         }
-    } */
+    }
 
     // test logic to use mars 8 type network logic
-    private val _asteroids = MutableLiveData<List<Asteroid>>()
-    val asteroids: LiveData<List<Asteroid>>
-        get() = _asteroids
+    //private val _asteroids = MutableLiveData<List<Asteroid>>()
+    val asteroids: LiveData<List<Asteroid>> = asteroidRepository.asteroids
+       // get() = _asteroids
 
     fun viewModelGetAsteroids() {
         val currentDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())

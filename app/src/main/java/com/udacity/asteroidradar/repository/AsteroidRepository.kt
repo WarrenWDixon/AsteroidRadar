@@ -10,12 +10,14 @@ import com.udacity.asteroidradar.api.NASAApi
 import com.udacity.asteroidradar.api.NASAApi.retrofitService
 import com.udacity.asteroidradar.api.asDatabaseModel
 import com.udacity.asteroidradar.api.computeEndDate
+import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 //import com.udacity.asteroidradar.api.getNASAAsteroids
 import com.udacity.asteroidradar.database.AsteroidsDatabase
 import com.udacity.asteroidradar.database.asDatabaseModel
 import com.udacity.asteroidradar.database.asDomainModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,13 +35,13 @@ class AsteroidRepository(private val database: AsteroidsDatabase) {
         val endDate = computeEndDate();
         withContext(Dispatchers.IO) {
             // following line of code used getNASAAsteroids in network utils, but it returns before the network data is fetched so returns empty array
-            // val asteroidList = getNASAAsteroids()
-            Log.d("WWD", "before network call")
+            val asteroidList = parseAsteroidsJsonResult(JSONObject(retrofitService.getAsteroids(currentDate, endDate, Constants.API_KEY)))
+
             // THE FOLLOWING LINE OF CODE CRASHES
             //val asteroidList = NASAApi.retrofitService.getAsteroids(currentDate, endDate, Constants.API_KEY).await()
             Log.d("WWD", "after network call")
            // Log.d("WWD", "in refreshAsteroids the data is " + asteroidList)
-           // database.asteroidDao.insertAll(*asteroidList.asDatabaseModel())
-        } */
+           database.asteroidDao.insertAll(*asteroidList.asDatabaseModel())
+        }
     }
 }

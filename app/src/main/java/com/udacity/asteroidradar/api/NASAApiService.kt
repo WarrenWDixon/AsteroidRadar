@@ -45,9 +45,12 @@ interface NASAApiService {
    //@GET("/neo/rest/v1/feed")
    //suspend fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): List<Asteroid>
 
-   @GET("/neo/rest/v1/feed")
-   fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): Call<String>
+    // old logic
+   //@GET("/neo/rest/v1/feed")
+   //fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): Call<String>
 
+    @GET("/neo/rest/v1/feed")
+    fun getAsteroids(@Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("api_key") API_Key: String): String
 
     @GET("/planetary/apod")
     fun getImageOfTheDay(@Query("api_key") API_Key: String): Call<ImageOfTheDay>
