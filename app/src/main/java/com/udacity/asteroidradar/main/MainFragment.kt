@@ -61,11 +61,15 @@ class MainFragment : Fragment() {
         })
         binding.asteroidRecycler.adapter = asteroidAdapter
         fetchImageOfTheDay(binding)
-        viewModel.theAsteroid.observe(viewLifecycleOwner, { selectedAsteroid ->
-            this.findNavController().navigate(MainFragmentDirections.actionShowDetail(selectedAsteroid))
-        })
+        viewModel.theAsteroid.observe(viewLifecycleOwner) { selectedAsteroid ->
+            if (null != selectedAsteroid) {
+                this.findNavController()
+                    .navigate(MainFragmentDirections.actionShowDetail(selectedAsteroid))
+                viewModel.displayAsteroidDetailCompleted()
+            }
+        }
 
-       viewModel.asteroids.observe(viewLifecycleOwner) {
+        viewModel.asteroids.observe(viewLifecycleOwner) {
             asteroidAdapter?.asteroidList = it
         }
         return binding.root

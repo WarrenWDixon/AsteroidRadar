@@ -36,6 +36,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val asteroids: LiveData<List<Asteroid>> = asteroidRepository.asteroids
 
+    fun displayAsteroidDetailCompleted() {
+        theAsteroid.value = null
+    }
     /**
      * Factory for constructing DevByteViewModel with parameter
      */
