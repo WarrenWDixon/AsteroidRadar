@@ -9,32 +9,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.udacity.asteroidradar.databinding.ListItemAsteroidBinding
 
 class AsteroidAdapter( val clickListener: AsteroidClickListener): RecyclerView.Adapter<AsteroidAdapter.AsteroidViewHolder>() {
-//class AsteroidAdapter(val asteroidList: List<Asteroid> ): RecyclerView.Adapter<AsteroidAdapter.AsteroidViewHolder>() {
     var asteroidList: List<Asteroid> = emptyList()
     set(value) {
         field = value
-        // For an extra challenge, update this to use the paging library.
-
-        // Notify any registered observers that the data set has changed. This will cause every
-        // element in our RecyclerView to be invalidated.
         notifyDataSetChanged()
-        Log.d("WWD", " --------------notify data set changed -------------")
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AsteroidViewHolder {
-       // Log.d("WWD", "In AsteroidAdapter onCreateViewHolder")
         val layoutInflater = LayoutInflater.from(parent.context)
-       // val view = layoutInflater.inflate(R.layout.list_item_asteroid, parent, false)
         val binding = ListItemAsteroidBinding.inflate(layoutInflater, parent, false)
         return AsteroidViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AsteroidViewHolder, position: Int) {
         val anAsteroid = asteroidList[position]
-        //Log.d("WWD", " -------------------in onBindViewHolder position is " + position)
-       // Log.d("WWD", "--------------------name is " + anAsteroid.codename)
-       // Log.d("WWD", "--------------------date is " + anAsteroid.closeApproachDate)
         holder.binding.asteroidName.text = anAsteroid.codename
+        holder.binding.asteroidName.contentDescription = anAsteroid.codename
         holder.binding.asteroidDate.text = anAsteroid.closeApproachDate
+        holder.binding.asteroidDate.contentDescription = anAsteroid.closeApproachDate
+
         holder.binding.asteroid = anAsteroid
         holder.binding.clickListener = clickListener
         holder.binding.executePendingBindings()
@@ -42,7 +35,6 @@ class AsteroidAdapter( val clickListener: AsteroidClickListener): RecyclerView.A
     }
 
     override fun getItemCount(): Int {
-        Log.d("WWD", "in getItemCount count is " + asteroidList.size)
         return asteroidList.size
     }
 

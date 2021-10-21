@@ -30,7 +30,6 @@ class AsteroidRepository(private val database: AsteroidsDatabase) {
         }
 
     suspend fun refreshAsteroids() {
-        Log.d("WWD", "in repository refreshAsteroids")
         val currentDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val endDate = computeEndDate();
         withContext(Dispatchers.IO) {
@@ -45,7 +44,6 @@ class AsteroidRepository(private val database: AsteroidsDatabase) {
                         )
                     )
                 )
-                Log.d("WWD", "after network call")
                 database.asteroidDao.insertAll(*asteroidList.asDatabaseModel())
             } catch (e: Exception) {
                 Log.d("WWD", "refreshAsteroids exception:" + e.message)

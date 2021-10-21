@@ -47,8 +47,6 @@ class MainFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        Log.d("WWD", "in onCreateView for MainFragment")
-
         binding = FragmentMainBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
@@ -95,7 +93,7 @@ class MainFragment : Fragment() {
             override fun onResponse(call: Call<ImageOfTheDay>, response: Response<ImageOfTheDay>) {
                 val imageObject = response.body() as ImageOfTheDay
                 val imageURL: String = imageObject.url
-                Log.d("WWD", "got NASA image url " )
+                binding.activityMainImageOfTheDay.contentDescription = imageObject.title
                 Picasso.get().load(imageURL).into(binding.activityMainImageOfTheDay)
             }
         })

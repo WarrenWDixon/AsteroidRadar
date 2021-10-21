@@ -13,9 +13,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
-    Log.d("WWD", "in parse jsonResult:  ")
     val nearEarthObjectsJson = jsonResult.getJSONObject("near_earth_objects")
-
     val asteroidList = ArrayList<Asteroid>()
 
     val nextSevenDaysFormattedDates = getNextSevenDaysFormattedDates()
@@ -28,7 +26,6 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
             Log.d("WWD", "no array for date" + formattedDate)
             continue;
         }
-       //Log.d("WWD", "dateArray is " + dateAsteroidJsonArray)
          for (i in 0 until dateAsteroidJsonArray.length()) {
             val asteroidJson = dateAsteroidJsonArray.getJSONObject(i)
             val id = asteroidJson.getLong("id")
@@ -51,7 +48,6 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
             asteroidList.add(asteroid)
         }
     }
-    Log.d("WWD", "in parse asteroidList size is " + asteroidList.size)
     return asteroidList
 }
 
@@ -70,35 +66,8 @@ private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
 
 fun computeEndDate() : String {
     val calendar = Calendar.getInstance()
-    calendar.add(Calendar.DAY_OF_YEAR, 1)
+    calendar.add(Calendar.DAY_OF_YEAR, 6)
     val currentTime = calendar.time
     val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
     return dateFormat.format(currentTime)
 }
-
-    // THE FOLLOWING CODE WORKS AND READS THE ASTEROID DATA SINCE
-   /* fun getNASAAsteroids() : MutableList<Asteroid> {
-    var NASAresponse: String? = null
-    val currentDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-    val endDate = computeEndDate();
-    var asteroidList = mutableListOf<Asteroid>()
-    NASAApi.retrofitService.getAsteroids(currentDate, endDate, Constants.API_KEY).enqueue( object:
-        Callback<String> {
-
-        override fun onFailure(call: Call<String>, t: Throwable) {
-            NASAresponse = "Failure: " + t.message
-            Log.d("WWD", "API call failed  " + NASAresponse)
-        }
-
-        override fun onResponse(call: Call<String>, response: Response<String>) {
-            NASAresponse = response.body().toString()
-            Log.d("WWD", " API call success ")
-            if (NASAresponse != null) {
-                val myJSON = JSONObject(NASAresponse!!)
-                asteroidList = parseAsteroidsJsonResult(myJSON)
-                //Log.d("WWD", "in getAsteroids parsed " + asteroidList)
-            }
-        }
-    })
-    return asteroidList
-} */

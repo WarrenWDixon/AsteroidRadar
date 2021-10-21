@@ -24,6 +24,19 @@ class DetailFragment : Fragment() {
             displayAstronomicalUnitExplanationDialog()
         }
 
+        // set content descriptions
+        if (asteroid.isPotentiallyHazardous) {
+            binding.activityMainImageOfTheDay.contentDescription = getString(R.string.potentially_hazardous_asteroid_image)
+        } else {
+            binding.activityMainImageOfTheDay.contentDescription = getString(R.string.not_hazardous_asteroid_image)
+        }
+
+        binding.closeApproachDate.text = asteroid.closeApproachDate
+        binding.absoluteMagnitude.text = asteroid.absoluteMagnitude.toString()
+        binding.distanceFromEarth.text = asteroid.distanceFromEarth.toString()
+        binding.estimatedDiameter.text = asteroid.estimatedDiameter.toString()
+        binding.relativeVelocity.text  = asteroid.relativeVelocity.toString()
+
         return binding.root
     }
 
